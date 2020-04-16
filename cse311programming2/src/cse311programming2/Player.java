@@ -237,34 +237,34 @@ public class Player {
 
 		for (int i=array.length-1;i>=0;i--) {
 			if(pindex!=0) {
-//				System.out.println("im at index "+i);
+				//				System.out.println("im at index "+i);
 				if (array[i].getPoints()==min) {
 					counter++;
-//					System.out.println("i'm counting!"+counter);
+					//					System.out.println("i'm counting!"+counter);
 
 				}
 				if (pindex>counter&&array[i].getPoints()==min) {
 					//if # need to replace is more than the min, replace w holder
 					array[i]=delete;
-//					System.out.println("hello"+pindex);
+					//					System.out.println("hello"+pindex);
 					//					min=getMin(array);
 					pindex--;
-//					System.out.println("here#"+pindex);
+					//					System.out.println("here#"+pindex);
 				}
 				if (pindex==counter) {
 					//if # need to replace is more than the min, replace w holder
 					if(array[i].getPoints()==min) {
 						array[i]=delete;
-//						System.out.println("here"+pindex);	
+						//						System.out.println("here"+pindex);	
 						pindex--;
-//						System.out.println("here~"+pindex);
+						//						System.out.println("here~"+pindex);
 					}
 
 
 				}
 				if(min!=getMin(array)) {
 					counter=0;
-//					System.out.println("hi");
+					//					System.out.println("hi");
 					min=getMin(array);
 				}
 
@@ -273,16 +273,25 @@ public class Player {
 					pindex--;
 				}
 				if(pindex<counter) {
-//					System.out.println("am i here?");
+					//					System.out.println("am i here?");
 					int inds=chooseIndex(indices,counter);
 					if(array[inds].getPoints()==min) {
 						array[inds]=delete;
 						pindex--;
-//						System.out.println("oh");
+						//						System.out.println("oh");
 					}
 				}
 			}
 		}
+	}
+	public static int countMax(Player[]array, int max) {
+		int counter=0;
+		for (int i=0;i<array.length;i++) {
+			if (array[i].getPoints()==max) {
+				counter++;
+			}
+		}
+		return counter;
 	}
 
 	public static Player[] replaceTop(Player[] array,int p) {
@@ -294,45 +303,60 @@ public class Player {
 			indices.add(i);
 		}
 		int inds=0;
-		int counter=0;
+		int max=getMax(array);
+
+		int counter=countMax(array,max);
 		for (int i=0;i<array.length;i++) {
 			if (pindex!=0) {
-				int max=getMax(array);
-				if (array[i].getPoints()==max) {
-					counter++;
-					//										System.out.println("I am counter: "+counter);
-				}
+				//				System.out.println("im index "+i);
+				//				if (array[i].getPoints()==max) {
+				//					counter++;
+				//					System.out.println("I am counter: "+counter);
+				//				}
+				//				System.out.println("I am counter: "+counter);
+
 				if(pindex>=counter&&array[i].getPoints()==max) {
 					top.add(array[i]);
 					array[i].setPoints(0);
 					//					top.add(array[i]);
 					pindex--;
-					//					System.out.println("points:"+array[inds].getPoints());
+					//					System.out.println("heLLo"+pindex);
 					//					System.out.println("yay! here!");
 
 				}
 				if(max!=getMax(array)) {
-					counter=0;
 					max=getMax(array);
+					counter=countMax(array,max);
 					//					System.out.println("I am counter: "+counter);
 					//					System.out.println("look here!");
 				}
+				//				if (pindex<counter&&array[i].getPoints()==max) {
+				//					top.add(array[i]);
+				//					array[i].setPoints(0);
+				//					System.out.println("hey here!"+pindex);
+				//					pindex--;
+				//				}
+				//				System.out.println("pindex hi"+pindex);
 				if(pindex<counter) {
-					inds=chooseIndex(indices,counter);
-					if (!top.contains(array[inds])&&array[inds].getPoints()==max) {
+					inds=chooseIndex(indices,pindex);
+
+					//					System.out.println("array value @ "+ inds+":"+array[inds].getId());
+
+					if (array[inds].getPoints()==max) {
 						top.add(array[inds]);
 						array[inds].setPoints(0);
 						pindex--;
+						//						System.out.println("good. here!"+pindex);
 						//					System.out.println("i'm here!");
 					}
 				}
 				//				System.out.println("I am pindex: "+pindex);
 			}
 		}
-//		System.out.println("top");
-		for(int i=0;i<top.size();i++) {
-//			System.out.println(top.get(i).getId()+": "+top.get(i).getPtype()+"  ");
-		}
+		//		System.out.println("top");
+		//		for(int i=0;i<top.size();i++) {
+		//			System.out.println(top.get(i).getId()+": "+top.get(i).getPtype()+"  ");
+		//		}
 		//		System.out.println("hi");
 		pindex=(int) (array.length*((double)p/100));
 		for (int i=0;i<array.length;i++) {
@@ -351,9 +375,9 @@ public class Player {
 	}
 
 	public static void main(String[] args) {
-		int n=4;
-		int p=25;
-		int k=3; 
+		int n=100;
+		int p=5;
+		int k=20; 
 		int m=5;
 		Player [] list = new Player[n];
 		String[] moves= {"cooperate","defect"};
@@ -388,7 +412,10 @@ public class Player {
 		int [] tracker2 = new int[k];
 		int [] tracker3 = new int[k];
 		int [] tracker4 = new int[k];
-
+		int [] trackeri = new int[k];
+		int [] trackerii = new int[k];
+		int [] trackeriii = new int[k];
+		int [] trackeriv = new int[k];
 		for (int x=0;x<k;x++) {
 			reset(list);
 			System.out.println("Gen "+(x+1)+":");
@@ -397,14 +424,14 @@ public class Player {
 				int p1genscore=0;
 				for (int j=i+1;j<n;j++) {
 					//					reset(list);
-										System.out.println("game #"+(count+1)+"\t  ");
+					//										System.out.println("game #"+(count+1)+"\t  ");
 
 					for (int y=0;y<m;y++) {
 
 						list[i].setmove(list[j]);
 						p1genscore=p1genscore+list[i].getScore();
-												System.out.print(list[i].getId()+" v "+list[j].getId()+"  ("+list[i].getScore()+","+list[j].getScore()+") \t");
-												System.out.println(list[i].getPtype()+" v "+list[j].getPtype());
+						//												System.out.print(list[i].getId()+" v "+list[j].getId()+"  ("+list[i].getScore()+","+list[j].getScore()+") \t");
+						//												System.out.println(list[i].getPtype()+" v "+list[j].getPtype());
 						if(j==list[i].getId()) {
 							scores[i]+=list[j].getScore();
 						}
@@ -464,6 +491,10 @@ public class Player {
 			tracker2[x]=g;
 			tracker3[x]=ac;
 			tracker4[x]=ad;
+			trackeri[x]=t4tscore;
+			trackerii[x]=gscore;
+			trackeriii[x]=acscore;
+			trackeriv[x]=adscore;
 
 			//			System.out.println("T4t: "+Math.round((double)t4t/n*100)+"%   G: "+Math.round((double)g/n*100)+"%   AC: "
 			//					+Math.round((double)ac/n*100)+"%   AD: "+Math.round((double)ad/n*100)+"%  "
@@ -474,46 +505,65 @@ public class Player {
 
 			//rank players based on score 
 			sortArray(list);
-			System.out.println("before deleting");
+			//			System.out.println("before deleting");
 			for (int i=0;i<n;i++) {
 				//				list[i].setId(i);
-				System.out.println(list[i].getPtype()+": "+list[i].getPoints());
+				//				System.out.println(list[i].getPtype()+": "+list[i].getPoints());
 			}
 			removeBot(list,p);
-//			System.out.println("after deleting");
+			//			System.out.println("after deleting");
 			for (int i=0;i<n;i++) {
-//				System.out.println(list[i].getPtype()+": "+list[i].getPoints());
+				//				System.out.println(list[i].getPtype()+": "+list[i].getPoints());
 			}
 			//			sortArray(list);
 			list=replaceTop(list,p);
 			sortArray(list);
 
-//			System.out.println("after replacing");
+			//			System.out.println("after replacing");
 			for (int i=0;i<n;i++) {
-//				System.out.println(list[i].getPtype()+": "+list[i].getPoints());
+				//				System.out.println(list[i].getPtype()+": "+list[i].getPoints());
 				list[i].setId(i);
 			}
 		}
 
-//				System.out.println("1: ");
-//				for (int i=0;i<k;i++) {
-//					System.out.print(tracker1[i]+", ");
-//				}
-//				System.out.println("\n2: ");
-//		
-//				for (int i=0;i<k;i++) {
-//					System.out.print(tracker2[i]+", ");
-//				}
-//				System.out.println("\n3: ");
-//		
-//				for (int i=0;i<k;i++) {
-//					System.out.print(tracker3[i]+", ");
-//				}
-//				System.out.println("\n4: ");
-//		
-//				for (int i=0;i<k;i++) {
-//					System.out.print(tracker4[i]+", ");
-//				}
+		System.out.print("t4t: ");
+		for (int i=0;i<k;i++) {
+			System.out.print(tracker1[i]+", ");
+		}
+		System.out.println("\ng: ");
+
+		for (int i=0;i<k;i++) {
+			System.out.print(tracker2[i]+", ");
+		}
+		System.out.println("\nac: ");
+
+		for (int i=0;i<k;i++) {
+			System.out.print(tracker3[i]+", ");
+		}
+		System.out.println("\nad: ");
+
+		for (int i=0;i<k;i++) {
+			System.out.print(tracker4[i]+", ");
+		}
+		System.out.print("\nt4t score: ");
+		for (int i=0;i<k;i++) {
+			System.out.print(trackeri[i]+", ");
+		}
+		System.out.println("\ng score: ");
+
+		for (int i=0;i<k;i++) {
+			System.out.print(trackerii[i]+", ");
+		}
+		System.out.println("\nac score: ");
+
+		for (int i=0;i<k;i++) {
+			System.out.print(trackeriii[i]+", ");
+		}
+		System.out.println("\nad score: ");
+
+		for (int i=0;i<k;i++) {
+			System.out.print(trackeriv[i]+", ");
+		}
 	}
 }
 
